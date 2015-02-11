@@ -123,7 +123,8 @@ def main():
             print(k, tm_def[k])
 
     # Start Turing Machine
-    # For now, convention is to start at state 'b'
+    # For now, convention is to start at state 'b' with tape containg "e" at
+    # initial position
     mach = TuringMachine(tm_def, 'b', ['e'])
 
     print('Starting turing machine execution')
@@ -134,7 +135,6 @@ def main():
     while input() != 'stop':
         mach.exec_step()
         print(mach)
-
 
 # Check if is running as script
 if __name__ == '__main__':
