@@ -118,8 +118,9 @@ def main():
         for sym in syms:
             tm_def[(st_config, sym)] = (ops, fn_config)
 
-    for k in tm_def.keys():
-        print(k, tm_def[k])
+    if VERB:
+        for k in tm_def.keys():
+            print(k, tm_def[k])
 
     # Start Turing Machine
     # For now, convention is to start at state 'b'
