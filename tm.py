@@ -14,6 +14,7 @@ import sys
 
 VERB = False
 
+
 class TuringMachine(object):
     """ Turing Machine Class """
     def __init__(self, tm_def, start, tape):
@@ -46,12 +47,12 @@ class TuringMachine(object):
         return string
 
     def exec_step(self):
-        """ Execute a step on the Turing Machine, acording to its definition """
+        """ Execute a step on the Turing Machine """
         sym = self.tape[self.head]
 
         # Get operation and next state from machine definition
         ops = self.definition.get((self.state, sym))
-        if ops == None:
+        if ops is None:
             print('No operation defined! Circular Machine', file=sys.stderr)
             sys.exit(1)
 
@@ -68,7 +69,7 @@ class TuringMachine(object):
             elif cur == 'L':
                 # Check if going out of the tape
                 if self.head == 0:
-                    print('moving head to left from initial position', file=sys.stderr)
+                    print('L op when head position is 0', file=sys.stderr)
                     sys.exit(1)
                 # Move head left
                 self.head = self.head - 1
@@ -93,11 +94,12 @@ class TuringMachine(object):
         self.state = ops[1]
 
     def computed_sequence(self):
-        """ Generate a string with the computed sequence of a Turing Machine """
+        """ Generate the computed sequence of a Turing Machine """
         seq = ''
         for i in [elem for elem in self.tape if elem == '0' or elem == '1']:
             seq = seq + i
         return seq
+
 
 def main():
     """ Script starting point """
