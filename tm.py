@@ -9,10 +9,9 @@ A simple turing machine simulator for ECS631U - Computability module on QMUL.
 Input file defininiton on the file input-format.md
 """
 
+import argparse
 import csv
 import sys
-
-VERB = False
 
 
 class TuringMachine(object):
@@ -56,11 +55,11 @@ class TuringMachine(object):
             print('No operation defined! Circular Machine', file=sys.stderr)
             sys.exit(1)
 
-        if VERB:
+        if args.verbose:
             print('operations: ' + ops[0])
         # There may be multiple operations separated by comma
         for cur in ops[0].split(','):
-            if VERB:
+            if args.verbose:
                 print('current operation: ' + cur)
             # Check which operation (also check for 'no operation' - empty
             # string)
@@ -103,8 +102,9 @@ class TuringMachine(object):
 
 def main():
     """ Script starting point """
+
     # Read Turing Machine definition
-    tm_file = csv.reader(open(sys.argv[1], 'r'), delimiter=';')
+    tm_file = csv.reader(open(args.tm, 'r'), delimiter=';')
 
     tm_def = dict()
     for line_aux in tm_file:
@@ -120,14 +120,14 @@ def main():
         for sym in syms:
             tm_def[(st_config, sym)] = (ops, fn_config)
 
-    if VERB:
+    if args.verbose:
         for k in tm_def.keys():
             print(k, tm_def[k])
 
     # Start Turing Machine
     # For now, convention is to start at state 'b' with tape containg "e" at
     # initial position
-    mach = TuringMachine(tm_def, 'b', ['e'])
+    mach = TuringMachine(tm_def, args.start_state, ['e'])
 
     print('Starting turing machine execution')
     print('type \'stop\' to stop or press enter for next step')
@@ -137,6 +137,18 @@ def main():
     while input() != 'stop':
         mach.exec_step()
         print(mach)
+
+# Create argument parser
+parser = argparse.ArgumentParser(description='Simple turing machine simulator\
+                                 for Turings own machine definition.')
+# parser.add_argument('-t', '--tape', default=['e']) # TODO
+parser.add_argument('-s', '--start-state', default='b')
+parser.add_argument('-v', '--verbose', action='store_const', const=True,
+                    default=False)
+parser.add_argument('tm')
+
+args = parser.parse_args()
+
 
 # Check if is running as script
 if __name__ == '__main__':
